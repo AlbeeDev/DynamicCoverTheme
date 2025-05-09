@@ -4,6 +4,15 @@ A visual extension for Spicetify that automatically adjusts your theme's colors 
 
 ---
 
+# Showcase
+|                              |                              |
+|------------------------------|------------------------------|
+| ![Example 1](assets/ss1.png) | ![Example 2](assets/ss2.png) |
+| ![Example 3](assets/ss3.png) | ![Example 4](assets/ss4.png) |
+
+
+---
+
 ## What It Does
 
 - Detects the colors of the current album cover art 
@@ -61,17 +70,6 @@ A visual extension for Spicetify that automatically adjusts your theme's colors 
 - No user data is collected or stored
 - Requests are made only for album artwork color extraction
 - External API used is secure-hosted and non-tracking
-
----
-
-# Showcase
-|                              |                              |
-|------------------------------|------------------------------|
-| ![Example 1](assets/ss1.png) | ![Example 2](assets/ss2.png) |
-| ![Example 3](assets/ss3.png) | ![Example 4](assets/ss4.png) |
-
-
-
 
 ---
 
