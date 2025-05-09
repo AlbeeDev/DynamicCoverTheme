@@ -233,7 +233,7 @@ a3image.classList.add('npv-cross-fade-image','npv-cross-fade--next')
 //DynamicCoverTheme
 
 const changeLights = true;
-const topN = 6;
+//const topN = 6;
 
 let currentShuffleState = false;
 
@@ -244,8 +244,8 @@ let isDataNextReady = false;
 // == SERVER URLS ==
 const serverApiUrl = [
     'https://colorapi-795373524969.us-central1.run.app',
-    // 'https://albeelocal.ddns.net', secondary server (offline leave it commented)
-    // 'http://localhost:5000' enable this url if you have the server docker image (5x less latency)
+    // 'https://albeelocal.ddns.net', secondary server (check status online on the repostitory. most likely never online)
+    // 'http://localhost:5000' local docker image
 ]
 let apiTimout = 10000
 
@@ -254,7 +254,7 @@ let lastApiUrl = null;
 function extractDominantColors(metadata) {
     const payload = {
         image_url: metadata.image_url,
-        top_n: topN,
+        //top_n: topN,
         album_title: metadata.album_title,
         album_artist_name: metadata.album_artist_name
     };
@@ -318,26 +318,29 @@ async function getGradient(metadata) {
 }
 
 async function applyGradient(data){
-    let pf_gradient = performance.now()
+    //let pf_gradient = performance.now()
     if(a1image.src){
         document.documentElement.style.setProperty('--previous-color', getComputedStyle(document.documentElement).getPropertyValue('--secondary-tc').trim());
     }
     document.documentElement.style.setProperty('--next-color', '');
     document.documentElement.style.setProperty('--primary-tc', `rgb(${data.dominant_colors[0][0]}, ${data.dominant_colors[0][1]}, ${data.dominant_colors[0][2]})`);
     document.documentElement.style.setProperty('--secondary-tc', `rgb(${data.dominant_colors[1][0]}, ${data.dominant_colors[1][1]}, ${data.dominant_colors[1][2]})`);
-    
-    if(topN==3){
+
+    /* old system (tertiary theme color removed for now, feedback needed)
+    if(topN===3){
         document.documentElement.style.setProperty('--tertiary-tc', `rgb(${data.dominant_colors[2][0]}, ${data.dominant_colors[2][1]}, ${data.dominant_colors[2][2]})`);
     } else {
-        const brightness = 0.299 * data.dominant_colors[0][0] + 0.587 * data.dominant_colors[0][1] + 0.114 * data.dominant_colors[0][2];
-        if(brightness >= 128){
-            document.documentElement.style.setProperty('--tertiary-tc', `rgb(0,0,0)`);
-        }else{
-            document.documentElement.style.setProperty('--tertiary-tc', `rgb(255,255,255)`);
-        }
+
+    }*/
+    const brightness = 0.299 * data.dominant_colors[0][0] + 0.587 * data.dominant_colors[0][1] + 0.114 * data.dominant_colors[0][2];
+    if(brightness >= 128){
+        document.documentElement.style.setProperty('--tertiary-tc', `rgb(0,0,0)`);
+    }else{
+        document.documentElement.style.setProperty('--tertiary-tc', `rgb(255,255,255)`);
     }
+
     isDataNextReady = false;
-    pf_gradient = performance.now() - pf_gradient
+    //pf_gradient = performance.now() - pf_gradient
     //log(`gradient apply: ${pf_gradient} ms.`,"time");
 
     if(changeLights){
@@ -346,7 +349,7 @@ async function applyGradient(data){
 }
 
 async function applyNextSongGradient() {
-    let pf_gradient_total = performance.now();
+    //let pf_gradient_total = performance.now();
     //log("Starting applyNextSongGradient", "performance");
     
     if(data_next){
@@ -371,14 +374,14 @@ async function applyNextSongGradient() {
         
     }
 
-    pf_gradient_total = performance.now() - pf_gradient_total;
+    //pf_gradient_total = performance.now() - pf_gradient_total;
     //log(`Total gradient apply: ${pf_gradient_total} ms.`, "performance");
 
-    let pf_while = performance.now();
+    //let pf_while = performance.now();
     while (Spicetify.Player.data.item.uid === Spicetify.Queue.nextTracks[0].contextTrack.uid) {
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second
     }
-    pf_while = performance.now() - pf_while;
+    //pf_while = performance.now() - pf_while;
     //log(`While loop duration: ${pf_while} ms.`, "performance");
 
     updateDataOnQueue();
@@ -440,10 +443,10 @@ function initiate() {
         //console.log(metadata)
         metadata.image_url = `https://i.scdn.co/image/${metadata.image_url.split(":")[2]}`;
         getGradient(metadata).then(result => {
-            let pf_total = performance.now()
+            //let pf_total = performance.now()
             data = result;
             applyGradient(data)
-            pf_total = performance.now() - pf_total
+            //pf_total = performance.now() - pf_total
             //log(`gradient total apply: ${pf_total} ms.`,"time");
         });
     }
