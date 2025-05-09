@@ -247,6 +247,7 @@ const serverApiUrl = [
     // 'https://albeelocal.ddns.net', secondary server (offline leave it commented)
     // 'http://localhost:5000' enable this url if you have the server docker image (5x less latency)
 ]
+let apiTimout = 10000
 
 let lastApiUrl = null;
  
@@ -263,7 +264,7 @@ function extractDominantColors(metadata) {
     async function makeRequest(url) {
         //log(url,"api")
         const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 2000);
+        const timer = setTimeout(() => controller.abort(), apiTimout);
 
         try {
             const res = await fetch(url, {
