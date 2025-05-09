@@ -13,6 +13,9 @@ A visual extension for Spicetify that automatically adjusts your theme's colors 
 
 ---
 
+## NOTE
+- this is in my opinion a better alternative to the spicetify marketplace "Change Colours based on album art"
+
 ## What It Does
 
 - Detects the colors of the current album cover art 
