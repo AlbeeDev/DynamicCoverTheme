@@ -54,8 +54,7 @@ ca_style.innerHTML = `
 
 
 
-
-
+/*^DCT | DF-> */
 
 
 
@@ -141,7 +140,7 @@ const classToAdd = 'kChcaF3yz3SoL5dZPwEr';
 function setupObserverPlay() {
   if (observerPlay) {
     observerPlay.disconnect();
-    log("Observerplay disconnected (re-init)", "observer");
+    //log("Observerplay disconnected (re-init)", "observer");
   }
 
   observerPlay = new MutationObserver((mutationsList) => {
@@ -154,14 +153,14 @@ function setupObserverPlay() {
   });
 
   observerPlay.observe(document.body, { childList: true, subtree: true });
-  log("Observerplay created", "observer");
+  //log("Observerplay created", "observer");
 }
 
 // === OBSERVER: Handles fullscreen track DOM ===
 function setupObserverFs() {
   if (observerFs) {
     observerFs.disconnect();
-    log("Observerfs disconnected (re-init)", "observer");
+    //log("Observerfs disconnected (re-init)", "observer");
   }
 
   observerFs = new MutationObserver((mutations) => {
@@ -171,7 +170,7 @@ function setupObserverFs() {
           node.nodeType === Node.ELEMENT_NODE &&
           node.getAttribute('data-testid') === 'fullscreen-mode-container'
         ) {
-          log("Fullscreen mode active", "observer");
+          //log("Fullscreen mode active", "observer");
 
           const npvTrack = document.querySelector('.npv-track');
           const lowerplayerleft = node.querySelector('.npv-nowPlayingBar-section.npv-nowPlayingBar-left');
@@ -205,7 +204,7 @@ function setupObserverFs() {
   });
 
   observerFs.observe(document.body, { childList: true, subtree: true });
-  log("Observerfs created", "observer");
+  //log("Observerfs created", "observer");
 }
 
 // === INIT OBSERVERS ===
@@ -216,11 +215,11 @@ setupObserverFs();
 window.addEventListener('beforeunload', () => {
   if (observerPlay) {
     observerPlay.disconnect();
-    log("Observerplay disconnected", "observer");
+    //log("Observerplay disconnected", "observer");
   }
   if (observerFs) {
     observerFs.disconnect();
-    log("Observerfs disconnected", "observer");
+    //log("Observerfs disconnected", "observer");
   }
 });
 
@@ -242,10 +241,11 @@ let data_next = null;
 let data_next_id = "";
 let isDataNextReady = false;
 
+// == SERVER URLS ==
 const serverApiUrl = [
     'https://colorapi-795373524969.us-central1.run.app',
-    'https://albeelocal.ddns.net',
-    'http://localhost:5000'
+    // 'https://albeelocal.ddns.net', secondary server (offline leave it commented)
+    // 'http://localhost:5000' enable this url if you have the server docker image (5x less latency)
 ]
 
 let lastApiUrl = null;
@@ -257,11 +257,11 @@ function extractDominantColors(metadata) {
         album_title: metadata.album_title,
         album_artist_name: metadata.album_artist_name
     };
-    log("payload","api")
-    console.log(payload)
+    //log("payload","api")
+    //console.log(payload)
 
     async function makeRequest(url) {
-        log(url,"api")
+        //log(url,"api")
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), 2000);
 
@@ -281,13 +281,13 @@ function extractDominantColors(metadata) {
                 return await res.json();
             }
         } catch (err) {
-            log(`Failed on ${url}: `+ err.name+err.message, "network");
+            //log(`Failed on ${url}: `+ err.name+err.message, "network");
         }
     }
 
     async function fetchFromServer(path) {
         if(lastApiUrl!==null){
-            log("using already used url "+lastApiUrl, "network")
+            //log("using already used url "+lastApiUrl, "network")
             const res = await makeRequest(lastApiUrl);
             if (res) return res;
         }
@@ -307,11 +307,11 @@ async function getGradient(metadata) {
     let data= null;
     try {
         data = await extractDominantColors(metadata);
-        log("extracted colors", "metadata")
-        console.log(data)
+        //log("extracted colors", "metadata")
+        //console.log(data)
         return data;
     } catch (error) {
-        log('Error getting top colors:'+ error, "error");
+        //log('Error getting top colors:'+ error, "error");
         return null;
     }    
 }
@@ -337,7 +337,7 @@ async function applyGradient(data){
     }
     isDataNextReady = false;
     pf_gradient = performance.now() - pf_gradient
-    log(`gradient apply: ${pf_gradient} ms.`,"time");
+    //log(`gradient apply: ${pf_gradient} ms.`,"time");
 
     if(changeLights){
         //removed
@@ -346,7 +346,7 @@ async function applyGradient(data){
 
 async function applyNextSongGradient() {
     let pf_gradient_total = performance.now();
-    log("Starting applyNextSongGradient", "performance");
+    //log("Starting applyNextSongGradient", "performance");
     
     if(data_next){
         if((data_next_id === Spicetify.Player.data.item.uid) && isDataNextReady){
@@ -371,20 +371,20 @@ async function applyNextSongGradient() {
     }
 
     pf_gradient_total = performance.now() - pf_gradient_total;
-    log(`Total gradient apply: ${pf_gradient_total} ms.`, "performance");
+    //log(`Total gradient apply: ${pf_gradient_total} ms.`, "performance");
 
     let pf_while = performance.now();
     while (Spicetify.Player.data.item.uid === Spicetify.Queue.nextTracks[0].contextTrack.uid) {
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second
     }
     pf_while = performance.now() - pf_while;
-    log(`While loop duration: ${pf_while} ms.`, "performance");
+    //log(`While loop duration: ${pf_while} ms.`, "performance");
 
     updateDataOnQueue();
 }
 
 async function updateDataOnQueue() {
-    log("Updating data on queue", "network");
+    //log("Updating data on queue", "network");
     try {
         let metadata = Spicetify.Queue.nextTracks[0].contextTrack.metadata;
         a3image.src = metadata.image_url;
@@ -398,12 +398,12 @@ async function updateDataOnQueue() {
             document.documentElement.style.setProperty('--next-color', `rgb(${data_next.dominant_colors[1][0]}, ${data_next.dominant_colors[1][1]}, ${data_next.dominant_colors[1][2]})`);
         }
     } catch (error) {
-        log('Error updating data on queue: ' + error.message, "error");
+        //log('Error updating data on queue: ' + error.message, "error");
     }
 }
 
 function handleShuffleChange() {
-    log("Handling shuffle change", "ui");
+    //log("Handling shuffle change", "ui");
     const isShuffle = Spicetify.Player.getShuffle();
     if (isShuffle !== currentShuffleState) {
         currentShuffleState = isShuffle;
@@ -429,25 +429,25 @@ function log(message, tag) {
   
 
 function initiate() {
-    log("Initiate function called", "metadata");
+    //log("Initiate function called", "metadata");
     currentShuffleState = Spicetify.Player.getShuffle();
 
     let metadata = Spicetify.Player.data.item.metadata;
     if(metadata){
         a2image.src = metadata.image_url;
-        log("metadata","metadata")
-        console.log(metadata)
+        //log("metadata","metadata")
+        //console.log(metadata)
         metadata.image_url = `https://i.scdn.co/image/${metadata.image_url.split(":")[2]}`;
         getGradient(metadata).then(result => {
             let pf_total = performance.now()
             data = result;
             applyGradient(data)
             pf_total = performance.now() - pf_total
-            log(`gradient total apply: ${pf_total} ms.`,"time");
+            //log(`gradient total apply: ${pf_total} ms.`,"time");
         });
     }
-    log("next tracks","metadata")
-    console.log(Spicetify.Queue.nextTracks[0])
+    //log("next tracks","metadata")
+    //console.log(Spicetify.Queue.nextTracks[0])
     metadata = Spicetify.Queue.nextTracks[0].contextTrack.metadata;
     if(metadata){
         a3image.src = metadata.image_url;
