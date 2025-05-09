@@ -78,3 +78,7 @@ A visual extension for Spicetify that automatically adjusts your theme's colors 
 ## Availability
 
 Currently in testing. If you're interested to contribute or have any questions about the extension, feel free to reach out (@albeedev on discord or in the spicetify discord server).
+
+## 🙏 Credits
+
+Partially inspired by [dynamic-lights-homeassistant](https://github.com/muckelba/dynamic-lights-homeassistant) by [@muckelba](https://github.com/muckelba)
