@@ -1,3 +1,6 @@
+
+![Server Status](https://img.shields.io/uptimerobot/status/m800510579-30b3454373c4e71c0a9a4865)
+
 # Dynamic Album-Themed UI for Spicetify
 
 A visual extension for Spicetify that automatically adjusts your theme's colors based on the currently playing album's artwork.
